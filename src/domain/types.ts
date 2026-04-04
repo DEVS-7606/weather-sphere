@@ -65,3 +65,8 @@ export type Intent =
   | "max_temp"
   | "min_temp"
   | "full";
+
+export interface GlobeClickEvent {
+  latitude: number;
+  longitude: number;
+}

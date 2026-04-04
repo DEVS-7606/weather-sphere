@@ -1,0 +1,423 @@
+/* =============================================
+   TAILWIND CONFIG — All custom design tokens,
+   utilities, and component styles
+   ============================================= */
+
+/* ===== Custom Theme Tokens ===== */
+@theme {
+  /* Stitch "Atmospheric Immersion" palette */
+  --color-surface: #060e20;
+  --color-surface-low: #091328;
+  --color-surface-mid: #0f1930;
+  --color-surface-high: #141f38;
+  --color-surface-bright: #1f2b49;
+  --color-surface-variant: #192540;
+  --color-on-surface: #dee5ff;
+  --color-on-surface-variant: #a3aac4;
+  --color-outline: #6d758c;
+  --color-outline-variant: #40485d;
+  --color-cyan: #4cd6fe;
+  --color-cyan-dim: #37c8ef;
+  --color-cyan-container: #21bde4;
+  --color-violet: #9094fa;
+  --color-violet-container: #373a9b;
+  --color-amber: #ffb153;
+  --color-amber-container: #fd9d06;
+
+  /* Easings */
+  --ease-atmo: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-hud: cubic-bezier(0.23, 1, 0.32, 1);
+
+  /* Typography */
+  --font-heading: var(--font-sans);
+  --font-sans: "Geist Variable", sans-serif;
+
+  /* Radii */
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+
+  /* shadcn color mappings */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+}
+
+/* ===== CSS Custom Properties (shadcn) ===== */
+:root {
+  --background: #060e20;
+  --foreground: #dee5ff;
+  --card: #091328;
+  --card-foreground: #dee5ff;
+  --popover: #141f38;
+  --popover-foreground: #dee5ff;
+  --primary: #4cd6fe;
+  --primary-foreground: #004657;
+  --secondary: #192540;
+  --secondary-foreground: #dee5ff;
+  --muted: #0f1930;
+  --muted-foreground: #a3aac4;
+  --accent: #1f2b49;
+  --accent-foreground: #dee5ff;
+  --destructive: #ff716c;
+  --border: #40485d33;
+  --input: #40485d33;
+  --ring: #4cd6fe;
+  --chart-1: #4cd6fe;
+  --chart-2: #9094fa;
+  --chart-3: #ffb153;
+  --chart-4: #ff716c;
+  --chart-5: #37c8ef;
+  --radius: 0.75rem;
+}
+
+/* ===== Custom Utilities ===== */
+@utility duration-1200 {
+  transition-duration: 1200ms;
+}
+
+@utility duration-600 {
+  transition-duration: 600ms;
+}
+
+@utility duration-400 {
+  transition-duration: 400ms;
+}
+
+@utility shadow-hud {
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+@utility shadow-glow-cyan {
+  box-shadow: 0 0 20px rgba(76, 214, 254, 0.15);
+}
+
+@utility shadow-glow-cyan-lg {
+  box-shadow: 0 0 40px rgba(76, 214, 254, 0.2);
+}
+
+@utility shadow-header {
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+}
+
+@utility shadow-logo {
+  box-shadow: 0 0 15px rgba(76, 214, 254, 0.3);
+}
+
+@utility shadow-chat-panel {
+  box-shadow: 0 40px 60px -10px rgba(0, 0, 0, 0.15);
+}
+
+@utility backdrop-blur-hud {
+  backdrop-filter: blur(32px);
+  -webkit-backdrop-filter: blur(32px);
+}
+
+@utility glass-surface {
+  background: rgba(25, 37, 64, 0.4);
+  backdrop-filter: blur(32px);
+  -webkit-backdrop-filter: blur(32px);
+}
+
+@utility text-balance {
+  text-wrap: balance;
+}
+
+@utility h-bar {
+  height: 5px;
+}
+
+@utility min-w-hourly {
+  min-width: 62px;
+}
+
+@utility grid-cols-daily {
+  grid-template-columns: 85px 30px 1fr;
+}
+
+@utility grid-cols-daily-sm {
+  grid-template-columns: 130px 32px 1fr;
+}
+
+@utility text-2xs {
+  font-size: 10px;
+  line-height: 14px;
+}
+
+@utility text-3xs {
+  font-size: 8px;
+  line-height: 12px;
+}
+
+@utility tracking-label {
+  letter-spacing: 0.12em;
+}
+
+@utility tracking-display {
+  letter-spacing: -0.04em;
+}
+
+@utility tracking-headline {
+  letter-spacing: -0.02em;
+}
+
+@utility leading-display {
+  line-height: 0.85;
+}
+
+@utility text-display {
+  font-size: 5.5rem;
+}
+
+@utility text-display-md {
+  font-size: 7rem;
+}
+
+@utility text-display-lg {
+  font-size: 8.5rem;
+}
+
+@utility max-w-chat-bubble {
+  max-width: 85%;
+}
+
+@utility w-chat-panel-sm {
+  width: 380px;
+}
+
+@utility h-chat-panel-sm {
+  height: 520px;
+}
+
+@utility w-chat-panel-lg {
+  width: 400px;
+}
+
+@utility h-chat-panel-lg {
+  height: 560px;
+}
+
+@utility max-w-dashboard {
+  max-width: 1048px;
+}
+
+@utility w-dashboard-col {
+  width: 480px;
+}
+
+/* ===== Component Styles ===== */
+@layer components {
+  /* ===== Globe Layout ===== */
+  .globe-layout {
+    display: flex;
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .weather-panel {
+    transition:
+      width 500ms var(--ease-atmo),
+      min-width 500ms var(--ease-atmo),
+      opacity 400ms ease;
+    overflow-y: auto;
+    overflow-x: hidden;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .weather-panel-full {
+    width: 100%;
+    min-width: 100%;
+  }
+
+  .weather-panel-sidebar {
+    width: 420px;
+    min-width: 420px;
+    border-right: none;
+    background: linear-gradient(180deg, #091328 0%, #060e20 100%);
+  }
+
+  .globe-canvas-container {
+    flex: 1;
+    min-width: 0;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 600ms var(--ease-atmo);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .globe-canvas-container canvas {
+    cursor: grab;
+  }
+
+  .globe-canvas-container canvas:active {
+    cursor: grabbing;
+  }
+
+  .globe-canvas-active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* ===== Globe Toggle Button ===== */
+  .globe-toggle-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 9999px;
+    background: #192540;
+    border: none;
+    color: #a3aac4;
+    cursor: pointer;
+    transition: all 400ms var(--ease-atmo);
+    flex-shrink: 0;
+  }
+
+  .globe-toggle-btn:hover {
+    background: #1f2b49;
+    color: #dee5ff;
+  }
+
+  .globe-toggle-btn.active {
+    background: #4cd6fe1a;
+    color: #4cd6fe;
+    box-shadow: 0 0 20px #4cd6fe15;
+    animation: glow-beat 2s ease-in-out infinite;
+  }
+
+  /* ===== Keyframes ===== */
+  @keyframes glow-beat {
+    0%,
+    100% {
+      box-shadow: 0 0 15px #4cd6fe15;
+      background: #4cd6fe1a;
+    }
+    50% {
+      box-shadow: 0 0 30px #4cd6fe40;
+      background: #4cd6fe2a;
+    }
+  }
+
+  @keyframes globe-spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .globe-icon-spin {
+    animation: globe-spin 12s linear infinite;
+  }
+
+  @keyframes marker-pulse {
+    0%,
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    50% {
+      transform: scale(1.6);
+      opacity: 0.4;
+    }
+  }
+
+  @keyframes slide-in-left {
+    from {
+      opacity: 0;
+      transform: translateX(-40px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes slide-in-right {
+    from {
+      opacity: 0;
+      transform: translateX(40px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes fade-in-up {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* ===== Scrollbar ===== */
+  ::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #40485d44;
+    border-radius: 3px;
+  }
+
+  /* ===== Mobile Globe Takeover ===== */
+  @media (max-width: 639px) {
+    .weather-panel-sidebar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 30;
+      width: 100% !important;
+      min-width: 100% !important;
+      max-height: 45vh;
+      background: #060e20e8;
+      backdrop-filter: blur(32px);
+      -webkit-backdrop-filter: blur(32px);
+      border-radius: 1.5rem 1.5rem 0 0;
+    }
+
+    .globe-canvas-container {
+      position: absolute;
+      inset: 0;
+      width: 100% !important;
+    }
+  }
+} /* end @layer components */

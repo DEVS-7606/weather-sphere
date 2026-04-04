@@ -3,7 +3,7 @@ import type {
   WeatherData,
   HourlyForecast,
   DailyForecast,
-} from "./types";
+} from "@/domain/types";
 
 export async function searchCities(query: string): Promise<GeoResult[]> {
   if (query.trim().length < 2) return [];
@@ -112,14 +112,14 @@ export async function fetchWeatherByLocation(): Promise<WeatherData> {
       async (pos) => {
         try {
           const { latitude, longitude } = pos.coords;
-          const geoRes = await fetch(
-            `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`,
-          );
-          const geo = await geoRes.json();
-          const cityName = geo.city || geo.locality || "Your Location";
-          const country = geo.countryName || "";
+          const geo = await reverseGeocode(latitude, longitude);
           resolve(
-            await fetchWeatherByCoords(latitude, longitude, cityName, country),
+            await fetchWeatherByCoords(
+              latitude,
+              longitude,
+              geo.city,
+              geo.country,
+            ),
           );
         } catch (e) {
           reject(e);
@@ -128,4 +128,26 @@ export async function fetchWeatherByLocation(): Promise<WeatherData> {
       () => reject(new Error("Location permission denied")),
     );
   });
+}
+
+export async function reverseGeocode(
+  lat: number,
+  lon: number,
+): Promise<{ city: string; country: string }> {
+  const res = await fetch(
+    `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=en`,
+  );
+  const geo = await res.json();
+  return {
+    city: geo.city || geo.locality || "Unknown Location",
+    country: geo.countryName || "",
+  };
+}
+
+export async function fetchWeatherByLatLon(
+  lat: number,
+  lon: number,
+): Promise<WeatherData> {
+  const { city, country } = await reverseGeocode(lat, lon);
+  return fetchWeatherByCoords(lat, lon, city, country);
 }
