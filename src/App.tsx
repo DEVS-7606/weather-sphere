@@ -56,7 +56,7 @@ function App() {
 
         <div className="globe-layout flex-1 w-full pointer-events-none">
           <main
-            className={`weather-panel pointer-events-none px-3 sm:px-5 lg:px-6 py-5 pb-24 mx-auto w-full`}
+            className={`weather-panel pointer-events-none px-3 sm:px-5 lg:px-6 py-5 pb-24 mx-auto w-full ${globeActive ? "weather-panel-globe-active" : ""}`}
           >
             <div className="mx-auto flex justify-center w-full">
               <WeatherDashboard

@@ -25,7 +25,7 @@ export function DetailGridTop({ weather: w, compact = false }: Props) {
     : "text-sm font-normal text-on-surface-variant ml-1";
 
   return (
-    <div className={`grid gap-4 ${compact ? "grid-cols-1" : "grid-cols-3"}`}>
+    <div className={`grid gap-4 ${compact ? "grid-cols-1" : "grid-cols-1 sm:grid-cols-3"}`}>
       <DetailCard label="🌡️ Feels Like" compact={compact}>
         <p className={val}>{Math.round(w.feelsLike)}°</p>
         <p className={note}>
@@ -84,7 +84,7 @@ export function DetailGridBottom({ weather: w, compact = false }: Props) {
 
   return (
     <div
-      className={`grid gap-4 h-full ${compact ? "grid-cols-1" : "grid-cols-5"}`}
+      className={`grid gap-4 h-full ${compact ? "grid-cols-1" : "grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5"}`}
     >
       <DetailCard label="☀️ UV Index" compact={compact}>
         <p className={val}>{w.uvIndex}</p>

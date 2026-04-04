@@ -229,6 +229,7 @@
 
 /* ===== Component Styles ===== */
 @layer components {
+
   /* ===== Globe Layout ===== */
   .globe-layout {
     display: flex;
@@ -256,10 +257,33 @@
   }
 
   .weather-panel-sidebar {
-    width: 420px;
-    min-width: 420px;
+    width: 100%;
+    min-width: 100%;
     border-right: none;
     background: linear-gradient(180deg, #091328 0%, #060e20 100%);
+  }
+
+  @media (min-width: 640px) {
+    .weather-panel-sidebar {
+      width: 420px;
+      min-width: 420px;
+    }
+  }
+
+  /* Dashboard column compact transforms — only applied on lg+ screens */
+  .dashboard-col-compact-left,
+  .dashboard-col-compact-right {
+    transform: translateX(0);
+  }
+
+  @media (min-width: 1280px) {
+    .dashboard-col-compact-left {
+      transform: translateX(calc(524px - 50vw));
+    }
+
+    .dashboard-col-compact-right {
+      transform: translateX(calc(50vw - 524px));
+    }
   }
 
   .globe-canvas-container {
@@ -315,11 +339,13 @@
 
   /* ===== Keyframes ===== */
   @keyframes glow-beat {
+
     0%,
     100% {
       box-shadow: 0 0 15px #4cd6fe15;
       background: #4cd6fe1a;
     }
+
     50% {
       box-shadow: 0 0 30px #4cd6fe40;
       background: #4cd6fe2a;
@@ -330,6 +356,7 @@
     from {
       transform: rotate(0deg);
     }
+
     to {
       transform: rotate(360deg);
     }
@@ -340,11 +367,13 @@
   }
 
   @keyframes marker-pulse {
+
     0%,
     100% {
       transform: scale(1);
       opacity: 1;
     }
+
     50% {
       transform: scale(1.6);
       opacity: 0.4;
@@ -356,6 +385,7 @@
       opacity: 0;
       transform: translateX(-40px);
     }
+
     to {
       opacity: 1;
       transform: translateX(0);
@@ -367,6 +397,7 @@
       opacity: 0;
       transform: translateX(40px);
     }
+
     to {
       opacity: 1;
       transform: translateX(0);
@@ -378,6 +409,7 @@
       opacity: 0;
       transform: translateY(30px);
     }
+
     to {
       opacity: 1;
       transform: translateY(0);
@@ -389,29 +421,45 @@
     width: 5px;
     height: 5px;
   }
+
   ::-webkit-scrollbar-track {
     background: transparent;
   }
+
   ::-webkit-scrollbar-thumb {
     background: #40485d44;
     border-radius: 3px;
   }
 
-  /* ===== Mobile Globe Takeover ===== */
-  @media (max-width: 639px) {
-    .weather-panel-sidebar {
-      position: absolute;
+  /* ===== Mobile & Tablet Globe Takeover ===== */
+  @media (max-width: 1279px) {
+    .weather-panel-globe-active {
+      position: fixed;
       bottom: 0;
       left: 0;
       right: 0;
+      top: auto;
       z-index: 30;
       width: 100% !important;
       min-width: 100% !important;
-      max-height: 45vh;
+      max-height: 50vh;
+      overflow-y: auto;
       background: #060e20e8;
       backdrop-filter: blur(32px);
       -webkit-backdrop-filter: blur(32px);
       border-radius: 1.5rem 1.5rem 0 0;
+      pointer-events: auto;
+      padding-bottom: 5rem;
+    }
+
+    .weather-panel-globe-active::npmbefore {
+      content: "";
+      display: block;
+      width: 36px;
+      height: 4px;
+      border-radius: 2px;
+      background: #40485d;
+      margin: 0 auto 0.75rem;
     }
 
     .globe-canvas-container {
@@ -420,4 +468,6 @@
       width: 100% !important;
     }
   }
-} /* end @layer components */
+}
+
+/* end @layer components */

@@ -80,7 +80,7 @@ export default function WeatherHero({ weather: w, compact = false }: Props) {
             pointerEvents: compact ? "none" : "auto",
           }}
         >
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-headline text-on-surface leading-tight whitespace-nowrap">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-headline text-on-surface leading-tight">
             {w.city}
           </h1>
           <p className="text-on-surface-variant text-sm mt-1">{w.country}</p>
@@ -99,7 +99,7 @@ export default function WeatherHero({ weather: w, compact = false }: Props) {
             </div>
           </div>
 
-          <div className="flex items-center gap-4 mt-4 text-sm text-on-surface-variant whitespace-nowrap">
+          <div className="flex items-center flex-wrap gap-x-4 gap-y-1 mt-4 text-sm text-on-surface-variant">
             <span>H: {Math.round(w.maxTemp)}°</span>
             <span className="w-px h-3 bg-outline-variant/30" />
             <span>L: {Math.round(w.minTemp)}°</span>

@@ -46,15 +46,10 @@ export default function WeatherDashboard({
         GPU-Accelerated Flex Grid Layout.
         On lg+ screens, items start in the center (gap-6) and use transform to slide outward.
       */}
-      <div className="w-full max-w-dashboard flex flex-col lg:flex-row justify-center items-center lg:items-start gap-6 px-5 sm:px-8 relative z-10">
+      <div className="w-full max-w-dashboard flex flex-col xl:flex-row justify-center items-center xl:items-start gap-6 px-5 sm:px-8 relative z-10">
         {/* Left Col */}
         <div
-          className="flex flex-col gap-4 pointer-events-auto shrink-0 w-full lg:w-dashboard-col transition-transform duration-1200 ease-hud"
-          style={{
-            transform: compact
-              ? "translateX(calc(524px - 50vw))"
-              : "translateX(0)",
-          }}
+          className={`flex flex-col gap-4 pointer-events-auto w-full xl:w-dashboard-col transition-transform duration-1200 ease-hud ${compact ? "dashboard-col-compact-left" : ""}`}
         >
           <WeatherHero weather={weather} compact={compact} />
           <HourlyForecast hourly={weather.hourly} />
@@ -69,12 +64,7 @@ export default function WeatherDashboard({
 
         {/* Right Col */}
         <div
-          className="flex flex-col gap-4 pointer-events-auto shrink-0 w-full lg:w-dashboard-col transition-transform duration-1200 ease-hud"
-          style={{
-            transform: compact
-              ? "translateX(calc(50vw - 524px))"
-              : "translateX(0)",
-          }}
+          className={`flex flex-col gap-4 pointer-events-auto w-full xl:w-dashboard-col transition-transform duration-1200 ease-hud ${compact ? "dashboard-col-compact-right" : ""}`}
         >
           <DailyForecast daily={weather.daily} compact={compact} />
           <DetailGridTop weather={weather} compact={compact} />
