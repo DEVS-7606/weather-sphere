@@ -2,7 +2,11 @@
 
 A weather dashboard with an interactive 3D globe, real-time forecasts, and a built-in weather assistant chatbot.
 
-![WeatherSphere Dashboard](./screenshots/dashboard.png)
+![Dashboard Overview](./assets/dashboard.png)
+
+![Globe View — Africa](./assets/globe-view.png)
+
+![Globe View — Asia](./assets/globe-asia.png)
 
 ## Features
 
