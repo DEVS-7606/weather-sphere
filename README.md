@@ -1,73 +1,67 @@
-# React + TypeScript + Vite
+# WeatherSphere
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A weather dashboard with an interactive 3D globe, real-time forecasts, and a built-in weather assistant chatbot.
 
-Currently, two official plugins are available:
+![WeatherSphere Dashboard](./screenshots/dashboard.png)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Features
 
-## React Compiler
+- Interactive 3D globe — click anywhere to get weather for that location
+- Real-time current conditions (temperature, feels like, humidity, wind, pressure, UV index, cloud cover, precipitation)
+- 7-day daily forecast with min/max temperature range bars
+- 24-hour hourly forecast
+- Sunrise & sunset times
+- City search with autocomplete (geocoding)
+- Auto-detects your location on load
+- Weather Assistant chatbot — ask about weather in any city by name
+- Dark, space-themed UI
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Tech Stack
 
-## Expanding the ESLint configuration
+- React 19 + TypeScript
+- Vite
+- Tailwind CSS v4
+- shadcn/ui components
+- react-globe.gl — 3D globe rendering
+- Lucide React — icons
+- Geist variable font
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Data Sources
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+All weather data is free, no API key required:
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+- [Open-Meteo](https://open-meteo.com/) — current conditions, hourly & daily forecasts
+- [Open-Meteo Geocoding API](https://open-meteo.com/en/docs/geocoding-api) — city search
+- [BigDataCloud Reverse Geocode](https://www.bigdatacloud.com/free-api/free-reverse-geocode-to-city-api) — coordinates to city name
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Getting Started
+
+```bash
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Then open [http://localhost:5173](http://localhost:5173).
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Build
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm run build
+```
+
+## Project Structure
+
+```
+src/
+├── components/
+│   ├── atoms/        # ChatBubble, DetailCard, Spinner
+│   ├── molecules/    # DailyRow, HourlyItem, SearchBar
+│   ├── organisms/    # WeatherHero, HourlyForecast, DailyForecast, DetailGrid, ChatWidget
+│   ├── templates/    # WeatherDashboard
+│   └── ui/           # shadcn/ui primitives
+├── domain/           # TypeScript types
+├── features/globe/   # GlobeView component
+├── hooks/            # useWeather hook
+├── services/         # weatherApi, chatLogic
+└── utils/            # weatherUtils (codes, icons, labels)
 ```
