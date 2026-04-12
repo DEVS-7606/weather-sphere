@@ -57,15 +57,6 @@ export interface Message {
   weatherCard?: WeatherData;
 }
 
-export type Intent =
-  | "temperature"
-  | "humidity"
-  | "wind"
-  | "feels_like"
-  | "max_temp"
-  | "min_temp"
-  | "full";
-
 export interface GlobeClickEvent {
   latitude: number;
   longitude: number;
