@@ -229,7 +229,6 @@
 
 /* ===== Component Styles ===== */
 @layer components {
-
   /* ===== Globe Layout ===== */
   .globe-layout {
     display: flex;
@@ -339,7 +338,6 @@
 
   /* ===== Keyframes ===== */
   @keyframes glow-beat {
-
     0%,
     100% {
       box-shadow: 0 0 15px #4cd6fe15;
@@ -367,7 +365,6 @@
   }
 
   @keyframes marker-pulse {
-
     0%,
     100% {
       transform: scale(1);
@@ -452,7 +449,7 @@
       padding-bottom: 5rem;
     }
 
-    .weather-panel-globe-active::npmbefore {
+    .weather-panel-globe-active::before {
       content: "";
       display: block;
       width: 36px;
