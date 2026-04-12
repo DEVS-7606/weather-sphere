@@ -23,6 +23,30 @@ export default function GlobeView({
   const containerRef = useRef<HTMLDivElement>(null);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
   const [ready, setReady] = useState(false);
+  const [webGLSupported, setWebGLSupported] = useState(true);
+  const [mounted, setMounted] = useState(false);
+
+  // Check WebGL support once on mount
+  useEffect(() => {
+    try {
+      const canvas = document.createElement("canvas");
+      const gl =
+        canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+      if (!gl) setWebGLSupported(false);
+    } catch {
+      setWebGLSupported(false);
+    }
+  }, []);
+
+  // Delay mounting the globe to survive StrictMode's unmount/remount cycle.
+  // This prevents creating two WebGL contexts simultaneously.
+  useEffect(() => {
+    const timeout = setTimeout(() => setMounted(true), 50);
+    return () => {
+      clearTimeout(timeout);
+      setMounted(false);
+    };
+  }, []);
 
   // Measure container size — poll briefly since the CSS transition
   // animates width from 0 when globe becomes active
@@ -131,7 +155,12 @@ export default function GlobeView({
       className={`absolute inset-0 transition-opacity duration-1000 ${ready ? "opacity-100" : "opacity-0"} ${active ? "pointer-events-auto" : "pointer-events-none"}`}
       style={{ cursor: active ? "grab" : "default" }}
     >
-      {ready && dimensions.width > 0 && (
+      {!webGLSupported && (
+        <div className="absolute inset-0 flex items-center justify-center text-on-surface-variant text-sm text-center px-4">
+          3D globe is not supported on this device.
+        </div>
+      )}
+      {webGLSupported && mounted && ready && dimensions.width > 0 && (
         <>
           <div
             className="absolute inset-0 pointer-events-none z-10"
