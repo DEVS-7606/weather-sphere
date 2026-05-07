@@ -12,19 +12,57 @@ export function useWeather() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetchWeatherByLocation()
-      .then(setWeather)
-      .catch((err: unknown) => {
-        const msg = err instanceof Error ? err.message : "";
-        if (msg === "Location permission denied") {
-          setError("Location access was denied. Search for a city above.");
-        } else if (msg === "Location request timed out") {
-          setError("Location request timed out. Search for a city above.");
-        } else {
-          setError("Could not get your location. Search for a city above.");
-        }
-      })
-      .finally(() => setLoading(false));
+    // Check permission state first to give a better UX message if denied
+    if (navigator.permissions && navigator.permissions.query) {
+      navigator.permissions
+        .query({ name: "geolocation" })
+        .then((status) => {
+          if (status.state === "denied") {
+            setError(
+              "Location is blocked. Please enable it in your browser's site settings, then reload.",
+            );
+            setLoading(false);
+          } else {
+            // "granted" or "prompt" — proceed with the request
+            fetchWeatherByLocation()
+              .then(setWeather)
+              .catch((err: unknown) => {
+                const msg = err instanceof Error ? err.message : "";
+                if (msg === "Location permission denied") {
+                  setError(
+                    "Location access was denied. Please enable it in your browser's site settings, then reload.",
+                  );
+                } else if (msg === "Location request timed out") {
+                  setError(
+                    "Location request timed out. Search for a city above.",
+                  );
+                } else {
+                  setError(
+                    "Could not get your location. Search for a city above.",
+                  );
+                }
+              })
+              .finally(() => setLoading(false));
+          }
+        })
+        .catch(() => {
+          // Permissions API not supported — try directly
+          fetchWeatherByLocation()
+            .then(setWeather)
+            .catch(() =>
+              setError("Could not get your location. Search for a city above."),
+            )
+            .finally(() => setLoading(false));
+        });
+    } else {
+      // No Permissions API (older iOS Safari) — try directly
+      fetchWeatherByLocation()
+        .then(setWeather)
+        .catch(() =>
+          setError("Could not get your location. Search for a city above."),
+        )
+        .finally(() => setLoading(false));
+    }
   }, []);
 
   const selectCity = useCallback(async (result: GeoResult) => {
