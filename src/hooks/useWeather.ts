@@ -2,7 +2,6 @@ import { useState, useEffect, useCallback } from "react";
 import type { GeoResult, WeatherData } from "@/domain/types";
 import {
   fetchWeatherByCoords,
-  fetchWeatherByLocation,
   fetchWeatherByLatLon,
 } from "@/services/weatherApi";
 
