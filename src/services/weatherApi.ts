@@ -125,7 +125,20 @@ export async function fetchWeatherByLocation(): Promise<WeatherData> {
           reject(e);
         }
       },
-      () => reject(new Error("Location permission denied")),
+      (err) => {
+        if (err.code === err.PERMISSION_DENIED) {
+          reject(new Error("Location permission denied"));
+        } else if (err.code === err.TIMEOUT) {
+          reject(new Error("Location request timed out"));
+        } else {
+          reject(new Error("Unable to determine your location"));
+        }
+      },
+      {
+        enableHighAccuracy: false, // faster on mobile; avoids GPS cold-start delay
+        timeout: 10000, // 10 s — enough time for the browser to prompt & respond
+        maximumAge: 60000, // accept a cached position up to 1 min old
+      },
     );
   });
 }

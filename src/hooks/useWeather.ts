@@ -14,9 +14,16 @@ export function useWeather() {
   useEffect(() => {
     fetchWeatherByLocation()
       .then(setWeather)
-      .catch(() =>
-        setError("Could not get your location. Search for a city above."),
-      )
+      .catch((err: unknown) => {
+        const msg = err instanceof Error ? err.message : "";
+        if (msg === "Location permission denied") {
+          setError("Location access was denied. Search for a city above.");
+        } else if (msg === "Location request timed out") {
+          setError("Location request timed out. Search for a city above.");
+        } else {
+          setError("Could not get your location. Search for a city above.");
+        }
+      })
       .finally(() => setLoading(false));
   }, []);
 
