@@ -12,57 +12,39 @@ export function useWeather() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Check permission state first to give a better UX message if denied
-    if (navigator.permissions && navigator.permissions.query) {
-      navigator.permissions
-        .query({ name: "geolocation" })
-        .then((status) => {
-          if (status.state === "denied") {
+    let cancelled = false;
+
+    // Use a small delay to survive React StrictMode's double-mount in dev.
+    // In production StrictMode doesn't double-fire, but this is harmless there.
+    const timerId = setTimeout(() => {
+      if (cancelled) return;
+
+      fetchWeatherByLocation()
+        .then((data) => {
+          if (!cancelled) setWeather(data);
+        })
+        .catch((err: unknown) => {
+          if (cancelled) return;
+          const msg = err instanceof Error ? err.message : "";
+          if (msg === "Location permission denied") {
             setError(
-              "Location is blocked. Please enable it in your browser's site settings, then reload.",
+              "Location access was denied. Please enable it in your browser's site settings, then reload.",
             );
-            setLoading(false);
+          } else if (msg === "Location request timed out") {
+            setError("Location request timed out. Search for a city above.");
           } else {
-            // "granted" or "prompt" — proceed with the request
-            fetchWeatherByLocation()
-              .then(setWeather)
-              .catch((err: unknown) => {
-                const msg = err instanceof Error ? err.message : "";
-                if (msg === "Location permission denied") {
-                  setError(
-                    "Location access was denied. Please enable it in your browser's site settings, then reload.",
-                  );
-                } else if (msg === "Location request timed out") {
-                  setError(
-                    "Location request timed out. Search for a city above.",
-                  );
-                } else {
-                  setError(
-                    "Could not get your location. Search for a city above.",
-                  );
-                }
-              })
-              .finally(() => setLoading(false));
+            setError("Could not get your location. Search for a city above.");
           }
         })
-        .catch(() => {
-          // Permissions API not supported — try directly
-          fetchWeatherByLocation()
-            .then(setWeather)
-            .catch(() =>
-              setError("Could not get your location. Search for a city above."),
-            )
-            .finally(() => setLoading(false));
+        .finally(() => {
+          if (!cancelled) setLoading(false);
         });
-    } else {
-      // No Permissions API (older iOS Safari) — try directly
-      fetchWeatherByLocation()
-        .then(setWeather)
-        .catch(() =>
-          setError("Could not get your location. Search for a city above."),
-        )
-        .finally(() => setLoading(false));
-    }
+    }, 100); // 100ms delay — lets StrictMode's unmount happen first
+
+    return () => {
+      cancelled = true;
+      clearTimeout(timerId);
+    };
   }, []);
 
   const selectCity = useCallback(async (result: GeoResult) => {
