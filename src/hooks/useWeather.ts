@@ -14,32 +14,69 @@ export function useWeather() {
   useEffect(() => {
     let cancelled = false;
 
-    // Use a small delay to survive React StrictMode's double-mount in dev.
-    // In production StrictMode doesn't double-fire, but this is harmless there.
     const timerId = setTimeout(() => {
       if (cancelled) return;
 
-      fetchWeatherByLocation()
-        .then((data) => {
-          if (!cancelled) setWeather(data);
-        })
-        .catch((err: unknown) => {
+      // Debug: show what's happening with geolocation on this device
+      const isSecure =
+        window.location.protocol === "https:" ||
+        window.location.hostname === "localhost";
+      if (!isSecure) {
+        setError(
+          `Geolocation requires HTTPS. Current: ${window.location.protocol}//${window.location.hostname}`,
+        );
+        setLoading(false);
+        return;
+      }
+
+      if (!navigator.geolocation) {
+        setError("Geolocation is not supported by this browser.");
+        setLoading(false);
+        return;
+      }
+
+      // Call getCurrentPosition directly — this triggers the permission dialog
+      navigator.geolocation.getCurrentPosition(
+        async (pos) => {
           if (cancelled) return;
-          const msg = err instanceof Error ? err.message : "";
-          if (msg === "Location permission denied") {
+          try {
+            const { latitude, longitude } = pos.coords;
+            const { reverseGeocode } = await import("@/services/weatherApi");
+            const geo = await reverseGeocode(latitude, longitude);
+            const data = await fetchWeatherByCoords(
+              latitude,
+              longitude,
+              geo.city,
+              geo.country,
+            );
+            if (!cancelled) setWeather(data);
+          } catch {
+            if (!cancelled)
+              setError("Could not get your location. Search for a city above.");
+          } finally {
+            if (!cancelled) setLoading(false);
+          }
+        },
+        (err) => {
+          if (cancelled) return;
+          if (err.code === err.PERMISSION_DENIED) {
             setError(
               "Location access was denied. Please enable it in your browser's site settings, then reload.",
             );
-          } else if (msg === "Location request timed out") {
+          } else if (err.code === err.TIMEOUT) {
             setError("Location request timed out. Search for a city above.");
           } else {
             setError("Could not get your location. Search for a city above.");
           }
-        })
-        .finally(() => {
-          if (!cancelled) setLoading(false);
-        });
-    }, 100); // 100ms delay — lets StrictMode's unmount happen first
+          setLoading(false);
+        },
+        {
+          enableHighAccuracy: false,
+          timeout: 15000,
+          maximumAge: 60000,
+        },
+      );
+    }, 100);
 
     return () => {
       cancelled = true;
